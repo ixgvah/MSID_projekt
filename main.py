@@ -3,9 +3,11 @@ from TSP import *
 from ant_colony import *
 from simulated_annealing import *
 from genetic_algorithm import *
+import random
 
 
 if __name__ == "__main__":
+    random.seed(4444)
     problem = TSP(n_cities=40, seed=4444)
 
     print(f"Algorytm Mrówkowy (ACO) dla {problem.n_cities} miast")
