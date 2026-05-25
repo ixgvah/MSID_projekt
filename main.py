@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     print(f"Algorytm Mrówkowy (ACO) dla {problem.n_cities} miast")
 
-    iter_number = 30
+    iter_number = 15
     distances = []
     executions = []
 
