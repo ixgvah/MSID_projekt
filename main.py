@@ -2,6 +2,7 @@ import time
 from TSP import *
 from ant_colony import *
 from simulated_annealing import *
+from genetic_algorithm import *
 
 
 if __name__ == "__main__":
@@ -44,6 +45,28 @@ if __name__ == "__main__":
         sa_executions.append(execution_time)
         print(f"Test {i + 1}/{iter_number} | Dystans: {best_distance:.2f} | Czas: {execution_time:.2f} s")
 
+
+    print(f"\nAlgorytm Genetyczny (GA) dla {problem.n_cities} miast")
+    ga_distances = []
+    ga_executions = []
+    for i in range(iter_number):
+        start_time = time.time()
+        ga = GeneticAlgorithm(
+            problem=problem,
+            population_size=100,   # liczba tras w populacji
+            n_generations=300,     # liczba pokoleń
+            crossover_rate=0.85,   # szansa na krzyżowanie
+            mutation_rate=0.02,    # szansa mutacji na gen
+            tournament_size=5,     # rozmiar turnieju selekcji
+            elite_count=2          # ile najlepszych kopiujemy bez zmian
+        )
+        best_path, best_distance = ga.run()
+        end_time = time.time()
+        execution_time = end_time - start_time
+        ga_distances.append(best_distance)
+        ga_executions.append(execution_time)
+        print(f"Test {i + 1}/{iter_number} | Dystans: {best_distance:.2f} | Czas: {execution_time:.2f} s")
+
     #Wyniki ACO
     print(f"Algorytm:           Ant Colony Optimization (ACO)")
     print(f"Najlepszy wynik:    {min(distances):.2f}")
@@ -55,3 +78,9 @@ if __name__ == "__main__":
     print(f"Najlepszy wynik:    {min(sa_distances):.2f}")
     print(f"Średni wynik:       {sum(sa_distances) / iter_number:.2f}")
     print(f"Średni czas:        {sum(sa_executions) / iter_number:.4f} s")
+
+    #Wyniki GA
+    print(f"Algorytm:           Genetic Algorithm (GA)")
+    print(f"Najlepszy wynik:    {min(ga_distances):.2f}")
+    print(f"Średni wynik:       {sum(ga_distances) / iter_number:.2f}")
+    print(f"Średni czas:        {sum(ga_executions) / iter_number:.4f} s")
