@@ -1,6 +1,8 @@
 import time
-from MSID_projekt.TSP import *
-from MSID_projekt.ant_colony import *
+from TSP import *
+from ant_colony import *
+from simulated_annealing import *
+
 
 if __name__ == "__main__":
     problem = TSP(n_cities=40, seed=4444)
@@ -25,12 +27,31 @@ if __name__ == "__main__":
 
         print(f"Test {i + 1}/{iter_number} | Dystans: {best_distance:.2f} | Czas: {execution_time:.2f} s")
 
-    best_time = min(distances)
-    average_result = sum(distances) / iter_number
-    average_time = sum(executions) / iter_number
+    print(f"Symulowane Wyżarzanie (SA) dla {problem.n_cities} miast")
+    sa_distances = []
+    sa_executions = []
 
-    print("\nWYNIKI DO TABELI W RAPORCIE")
-    print(f"Algorytm:           Ant Colony Optimization (EAS)")
-    print(f"Najlepszy wynik:    {best_time:.2f}")
-    print(f"Średni wynik:       {average_result:.2f}")
-    print(f"Średni czas:        {average_time:.4f} s")
+    for i in range(iter_number):
+        start_time = time.time()
+
+        sa = SimulatedAnnealing(problem, initial_temp=1000.0, cooling_rate=0.999, min_temp=0.1)
+        best_path, best_distance = sa.run()
+
+        end_time = time.time()
+        execution_time = end_time - start_time
+
+        sa_distances.append(best_distance)
+        sa_executions.append(execution_time)
+        print(f"Test {i + 1}/{iter_number} | Dystans: {best_distance:.2f} | Czas: {execution_time:.2f} s")
+
+    #Wyniki ACO
+    print(f"Algorytm:           Ant Colony Optimization (ACO)")
+    print(f"Najlepszy wynik:    {min(distances):.2f}")
+    print(f"Średni wynik:       {sum(distances) / iter_number:.2f}")
+    print(f"Średni czas:        {sum(executions) / iter_number:.4f} s\n")
+
+    #Wyniki SA
+    print(f"Algorytm:           Simulated Annealing (SA)")
+    print(f"Najlepszy wynik:    {min(sa_distances):.2f}")
+    print(f"Średni wynik:       {sum(sa_distances) / iter_number:.2f}")
+    print(f"Średni czas:        {sum(sa_executions) / iter_number:.4f} s")
